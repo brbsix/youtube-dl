@@ -1363,6 +1363,15 @@ class AdobePassIE(InfoExtractor):
                 # TODO add support for other TV Providers
                 mso_id = self._downloader.params.get('ap_mso')
                 if not mso_id:
+                    for mso in MSO_INFO:
+                        username, password = self._get_netrc_login_info(mso, False)
+                        if username and password:
+                            mso_id = mso
+                            self.to_screen('found credentials in .netrc for %r' % mso)
+                            break
+                        else:
+                            self.to_screen('no credentials in .netrc for %r' % mso)
+                if not mso_id:
                     raise_mvpd_required()
                 username, password = self._get_login_info('ap_username', 'ap_password', mso_id)
                 if not username or not password:

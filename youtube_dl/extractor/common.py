@@ -790,7 +790,7 @@ class InfoExtractor(object):
         else:
             return res
 
-    def _get_netrc_login_info(self, netrc_machine=None):
+    def _get_netrc_login_info(self, netrc_machine=None, warn=True):
         username = None
         password = None
         netrc_machine = netrc_machine or self._NETRC_MACHINE
@@ -801,7 +801,7 @@ class InfoExtractor(object):
                 if info is not None:
                     username = info[0]
                     password = info[2]
-                else:
+                elif warn:
                     raise netrc.NetrcParseError(
                         'No authenticators for %s' % netrc_machine)
             except (IOError, netrc.NetrcParseError) as err:
